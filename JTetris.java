@@ -189,9 +189,7 @@ public class JTetris extends JComponent {
 		// Create the Timer object and have it send
 		// tick(DOWN) periodically
 		timer = new javax.swing.Timer(DELAY, new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				tick(DOWN);
-			}
+			public void actionPerformed(ActionEvent e) { tick(DOWN); }
 		});
 		
 		requestFocusInWindow(); 
@@ -672,8 +670,7 @@ public class JTetris extends JComponent {
 		
 		testButton = new JCheckBox("Test sequence");
 		panel.add(testButton);
-		
-		
+
 		return panel;
 	}
 	

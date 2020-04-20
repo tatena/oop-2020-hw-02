@@ -34,12 +34,46 @@ public class Piece {
 	 Makes its own copy of the array and the TPoints inside it.
 	*/
 	public Piece(TPoint[] points) {
-		// YOUR CODE HERE
+		body = new TPoint[points.length];
+		int minX = Integer.MAX_VALUE;
+		int maxX = Integer.MIN_VALUE;
+		int minY = Integer.MAX_VALUE;
+		int maxY = Integer.MIN_VALUE;
+		HashMap<Integer, Integer> skirtMap = new HashMap<>();
+		TPoint curr;
+		for (int i=0; i<points.length; i++) {
+			curr = points[i];
+			body[i] = new TPoint(curr);
+			minX = Math.min(curr.x, minX);
+			maxX = Math.max(curr.x, maxX);
+			minY = Math.min(curr.y, minY);
+			maxY = Math.max(curr.y, maxY);
+			fillSkirtMap(skirtMap, curr.x, curr.y);
+		}
+		width = maxX - minX + 1;
+		height = maxY - minY + 1;
+		fillSkirtArray(skirtMap, minX, width);
 	}
 	
+	private void fillSkirtArray(Map<Integer, Integer> skirtMap, int minX, int width) {
+		skirt = new int[width];
+		int index = 0;
+		for (int i = minX; i < minX + width; i++) {
+			skirt[index] = skirtMap.get(i);
+			index++;
+		}
+	}
 
-	
-	
+	private void fillSkirtMap(Map<Integer, Integer> skirtMap, int x, int y) {
+		if (skirtMap.containsKey(x)) {
+			if (skirtMap.get(x) > y)
+				skirtMap.replace(x, y);
+		} else {
+			skirtMap.put(x, y);
+		}
+	}
+
+
 	/**
 	 * Alternate constructor, takes a String with the x,y body points
 	 * all separated by spaces, such as "0 0  1 0  2 0	1 1".
@@ -87,8 +121,14 @@ public class Piece {
 	 rotated from the receiver.
 	 */
 	public Piece computeNextRotation() {
-		// YOUR CODE HERE
-		return null; // YOUR CODE HERE
+		TPoint[] newPieceArr = new TPoint[body.length];
+		int y, x;
+		for (int i = 0; i < body.length; i++) {
+			x = height - body[i].y - 1;
+			y = body[i].x;
+			newPieceArr[i] = new TPoint(x, y);
+		}
+		return new Piece(newPieceArr);
 	}
 
 	/**
@@ -119,8 +159,20 @@ public class Piece {
 		// (null will be false)
 		if (!(obj instanceof Piece)) return false;
 		Piece other = (Piece)obj;
-		
-		// YOUR CODE HERE
+
+		if (other.getBody().length != body.length) return false;
+
+		Set<TPoint> points = new HashSet<>();
+		for (int i=0; i<body.length; i++) {
+			points.add(body[i]);
+		}
+
+		TPoint[] otherBody = other.getBody();
+		for (int i=0; i < otherBody.length; i++) {
+			if (!points.contains(otherBody[i])) {
+				return false;
+			}
+		}
 		return true;
 	}
 
@@ -167,8 +219,7 @@ public class Piece {
 				makeFastRotations(new Piece(PYRAMID_STR)),
 			};
 		}
-		
-		
+
 		return Piece.pieces;
 	}
 	
@@ -187,8 +238,15 @@ public class Piece {
 	 to the first piece.
 	*/
 	private static Piece makeFastRotations(Piece root) {
-		// YOUR CODE HERE
-		return null; // YOUR CODE HERE
+		Piece curr = root;
+		while (true) {
+			curr.next = curr.computeNextRotation();
+			if (curr.next.equals(root)) {
+				curr.next = root;
+				return root;
+			}
+			curr = curr.next;
+		}
 	}
 	
 	
@@ -217,8 +275,4 @@ public class Piece {
 		TPoint[] array = points.toArray(new TPoint[0]);
 		return array;
 	}
-
-	
-
-
 }

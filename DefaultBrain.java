@@ -20,6 +20,7 @@ public class DefaultBrain implements Brain {
      the best play for that piece, or returns null if no play is possible.
      See the Brain interface for details.
     */
+
     public Brain.Move bestMove(Board board, Piece piece, int limitHeight, Brain.Move move) {
         // Allocate a move object if necessary
         if (move==null) move = new Brain.Move();
@@ -62,8 +63,8 @@ public class DefaultBrain implements Brain {
             current = current.fastRotation();
             if (current == piece) break;    // break if back to original rotation
         }
-        
-        if (bestPiece == null) return(null);    // could not find a play at all!
+
+        if (bestPiece == null) { return(null); }    // could not find a play at all!
         else {
             move.x = bestX;
             move.y = bestY;

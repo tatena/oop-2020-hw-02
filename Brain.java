@@ -8,7 +8,7 @@ public interface Brain {
         public int x;
         public int y;
         public Piece piece;
-        public double score;    // lower scores are better
+        public double score; // lower scores are better
     }
     
     /**
@@ -22,5 +22,5 @@ public interface Brain {
      If the passed in move is non-null, it is used to hold the result
      (just to save the memory allocation).
     */
-    public Brain.Move bestMove(Board board, Piece piece, int limitHeight, Brain.Move move);
+    public Move bestMove(Board board, Piece piece, int limitHeight, Move move);
 }

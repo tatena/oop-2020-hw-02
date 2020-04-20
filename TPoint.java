@@ -36,6 +36,10 @@ public class TPoint {
 		return(x==pt.x && y==pt.y);
 	}
 
+	@Override
+	public int hashCode() {
+		return Integer.hashCode(x) + Integer.hashCode(y);
+	}
 	// Standard toString() override, produce
 	// human-readable String from object
 	public String toString() {
